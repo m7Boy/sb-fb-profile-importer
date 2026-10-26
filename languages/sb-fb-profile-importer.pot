@@ -1,0 +1,265 @@
+# Copyright (C) 2024
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: SB FB Profile Importer 2.7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-01-01 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"PO-Revision-Date: 2024-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: includes/class-admin.php
+msgid "SB FB Profile Importer"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "SB FB Importer"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Facebook Source"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Source Type"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Facebook User/Page ID"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Access Token"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Import Settings"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Import Interval"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Max Posts Per Run"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Import Since (Optional)"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "WordPress Settings"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Post Type"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Post Status"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Default Category"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Default Author"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Content Options"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Add Source Link"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Add Import Tag"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Facebook Page"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Facebook Profile (Limited)"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Profile feed requires special permissions rarely granted. Use Page for reliable access."
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Validate Token"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Hourly"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Twice Daily"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Daily"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Draft"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Published"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Pending Review"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Import Status"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Last Run:"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Never"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "manual"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Results:"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Imported: %1$d, Skipped: %2$d"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Next Scheduled:"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Not scheduled"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Run Import Now"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Recent Imports"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "No imports yet."
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Title"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "FB ID"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Date"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Recent Logs"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Clear"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "No logs yet."
+msgstr ""
+
+#: includes/class-admin.php
+msgid "No Facebook source ID configured."
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Profile feed access may be restricted. Consider using a Facebook Page instead."
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Post missing ID"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Facebook post %s"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "Source:"
+msgstr ""
+
+#: includes/class-admin.php
+msgid "View on Facebook"
+msgstr ""
+
+#: includes/class-meta-client.php
+msgid "No Facebook access token configured."
+msgstr ""
+
+#: includes/class-meta-client.php
+msgid "Invalid JSON response from Facebook."
+msgstr ""
+
+#: includes/class-meta-client.php
+msgid "Unknown Facebook API error"
+msgstr ""
+
+#: includes/class-meta-client.php
+msgid "Invalid or expired access token."
+msgstr ""
+
+#: includes/class-meta-client.php
+msgid "Facebook API rate limit reached. Please try again later."
+msgstr ""
+
+#: includes/class-meta-client.php
+msgid "Permission error: %s"
+msgstr ""
+
+#: includes/class-meta-client.php
+msgid "Unexpected HTTP status: %d"
+msgstr ""
+
+#: assets/js/admin.js
+msgid "Validating..."
+msgstr ""
+
+#: assets/js/admin.js
+msgid "Importing..."
+msgstr ""
+
+#: assets/js/admin.js
+msgid "Success!"
+msgstr ""
+
+#: assets/js/admin.js
+msgid "Error:"
+msgstr ""
+
+#: assets/js/admin.js
+msgid "Are you sure?"
+msgstr ""
