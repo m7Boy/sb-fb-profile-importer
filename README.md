@@ -63,4 +63,4 @@ The plugin calls:
 
 ## Version
 
-2.8.0 — Import posts published by the Page (`/{page-id}/posts`). The OAuth redirect URI is the plugin admin page, without an extra callback parameter. Update that URI in the Facebook App.
+2.8.1 — URLs in imported Facebook posts are stored as readable links in the WordPress post.

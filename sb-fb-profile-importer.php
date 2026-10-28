@@ -3,7 +3,7 @@
  * Plugin Name:       SB FB Profile Importer
  * Plugin URI:        https://softwarebrewery.net
  * Description:       Connects a Facebook Page via OAuth and imports posts into WordPress. Developed by Software Brewery.
- * Version:           2.8.0
+ * Version:           2.8.1
  * Requires at least: 6.0
  * Requires PHP:      8.0
  * Author:            Software Brewery
@@ -17,7 +17,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'SB_FB_PROFILE_IMPORTER_VERSION', '2.8.0' );
+define( 'SB_FB_PROFILE_IMPORTER_VERSION', '2.8.1' );
 define( 'SB_FB_PROFILE_IMPORTER_FILE', __FILE__ );
 define( 'SB_FB_PROFILE_IMPORTER_DIR', plugin_dir_path( __FILE__ ) );
 define( 'SB_FB_PROFILE_IMPORTER_CRON_HEALTH', 'sb_fbpi_health_check' );
