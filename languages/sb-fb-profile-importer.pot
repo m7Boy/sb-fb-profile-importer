@@ -2,7 +2,7 @@
 # This file is distributed under the GPL v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: SB FB Profile Importer 2.7.0\n"
+"Project-Id-Version: SB FB Profile Importer 2.8.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-01 00:00+0000\n"
 "MIME-Version: 1.0\n"

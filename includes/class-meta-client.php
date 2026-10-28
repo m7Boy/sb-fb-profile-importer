@@ -2,7 +2,7 @@
 /**
  * Meta Graph API & OAuth client for SB FB Profile Importer.
  *
- * Handles: code exchange, long-lived token, /me/accounts, page feed, health check.
+ * Handles: code exchange, long-lived token, /me/accounts, page posts, health check.
  * No tokens in logs when WP_DEBUG is on.
  *
  * @package SB_FB_Profile_Importer
@@ -58,7 +58,7 @@ class SB_FB_Profile_Importer_Meta_Client {
     /**
      * Make GET request to Graph API.
      *
-     * @param string $endpoint e.g. "me/accounts" or "{page-id}/feed"
+     * @param string $endpoint e.g. "me/accounts" or "{page-id}/posts"
      * @param array  $params   Query params (access_token added by caller or here).
      * @return array{data?: array, error?: array}|WP_Error
      */
@@ -187,7 +187,7 @@ class SB_FB_Profile_Importer_Meta_Client {
      * Get redirect URI for OAuth callback.
      */
     public function get_redirect_uri(): string {
-        return admin_url( 'admin.php?page=sb-fb-profile-importer&sb_fbpi_oauth_callback=1' );
+        return admin_url( 'admin.php?page=sb-fb-profile-importer' );
     }
 
     /**
@@ -211,7 +211,7 @@ class SB_FB_Profile_Importer_Meta_Client {
     }
 
     /**
-     * Fetch page feed using Page Access Token.
+     * Fetch posts published by the Page, using the Page access token.
      *
      * @param string $page_id      Page ID.
      * @param string $page_token   Page access token.
@@ -220,7 +220,7 @@ class SB_FB_Profile_Importer_Meta_Client {
      */
     public function get_page_feed( string $page_id, string $page_token, int $limit = 5 ): array|WP_Error {
         $limit = max( 1, min( 50, (int) $limit ) );
-        $result = $this->graph_get( $page_id . '/feed', [
+        $result = $this->graph_get( $page_id . '/posts', [
             'access_token' => $page_token,
             'fields'       => 'id,message,created_time,permalink_url,attachments{media,type,url,subattachments{media,image,url}}',
             'limit'        => $limit,
@@ -235,7 +235,7 @@ class SB_FB_Profile_Importer_Meta_Client {
     }
 
     /**
-     * Fetch page feed for import (supports since timestamp).
+     * Fetch Page posts for import (supports since timestamp).
      *
      * @param string $page_id    Page ID.
      * @param string $page_token Page access token.
@@ -252,7 +252,7 @@ class SB_FB_Profile_Importer_Meta_Client {
         if ( ! empty( $params['since'] ) ) {
             $query['since'] = (int) $params['since'];
         }
-        $result = $this->graph_get( $page_id . '/feed', $query );
+        $result = $this->graph_get( $page_id . '/posts', $query );
         if ( is_wp_error( $result ) ) {
             return $result;
         }

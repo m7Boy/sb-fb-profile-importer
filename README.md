@@ -29,7 +29,7 @@ A WordPress plugin that connects a Facebook Page through OAuth and imports its p
 2. In Facebook Login → Settings:
    - Add this **Valid OAuth Redirect URI**:
      ```
-     https://your-site.com/wp-admin/admin.php?page=sb-fb-profile-importer&sb_fbpi_oauth_callback=1
+     https://your-site.com/wp-admin/admin.php?page=sb-fb-profile-importer
      ```
 
 ### Step 3: Connect in WordPress
@@ -59,8 +59,8 @@ The plugin requests:
 The plugin calls:
 
 - `GET /me/accounts` — list of Pages
-- `GET /{page-id}/feed` — posts from the selected Page
+- `GET /{page-id}/posts` — posts published by the selected Page
 
 ## Version
 
-2.7.0 — SB rebrand (Software Brewery). When upgrading from FB Profile Importer, activate the plugin again and update the OAuth Redirect URI in the Facebook App.
+2.8.0 — Import posts published by the Page (`/{page-id}/posts`). The OAuth redirect URI is the plugin admin page, without an extra callback parameter. Update that URI in the Facebook App.
