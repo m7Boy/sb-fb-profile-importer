@@ -306,6 +306,173 @@ class SB_FB_Profile_Importer_Admin {
     }
 
     /**
+     * Unique http(s) URLs found in plain text.
+     *
+     * @return string[]
+     */
+    private function extract_urls( string $text ): array {
+        if ( ! preg_match_all( '#(?:https?://|www\.)[^\s<>"\']+#iu', $text, $matches ) ) {
+            return [];
+        }
+
+        $urls = [];
+        foreach ( $matches[0] as $raw ) {
+            [ $url ] = $this->split_url_token( $raw );
+            if ( $url !== '' && ! in_array( $url, $urls, true ) ) {
+                $urls[] = $url;
+            }
+        }
+        return $urls;
+    }
+
+    /**
+     * Separate a matched URL token from trailing punctuation.
+     *
+     * @return array{0: string, 1: string} Valid URL and leftover punctuation.
+     */
+    private function split_url_token( string $raw ): array {
+        $url      = $raw;
+        $trailing = '';
+        while ( $url !== '' && str_contains( '.,;:!?)]}\'"', substr( $url, -1 ) ) ) {
+            $trailing = substr( $url, -1 ) . $trailing;
+            $url      = substr( $url, 0, -1 );
+        }
+        if ( stripos( $url, 'www.' ) === 0 ) {
+            $url = 'https://' . $url;
+        }
+        if ( ! wp_http_validate_url( $url ) ) {
+            return [ '', $raw ];
+        }
+        return [ $url, $trailing ];
+    }
+
+    /**
+     * Whether a line is only a URL.
+     */
+    private function is_url_line( string $line ): bool {
+        $line = trim( $line );
+        if ( ! preg_match( '#^(?:https?://|www\.)\S+$#iu', $line ) ) {
+            return false;
+        }
+        [ $url ] = $this->split_url_token( $line );
+        return $url !== '';
+    }
+
+    /**
+     * Remove URLs from a title and tidy the leftover separators.
+     */
+    private function strip_urls_from_title( string $text ): string {
+        $text = preg_replace( '#(?:https?://|www\.)\S+#iu', '', $text );
+        $text = preg_replace( '/[ \t]{2,}/', ' ', (string) $text );
+        return trim( (string) $text, " \t\n\r\0\x0B-–—:|" );
+    }
+
+    /**
+     * Short readable label for a URL.
+     */
+    private function link_label( string $url ): string {
+        $parts = wp_parse_url( $url );
+        $host  = isset( $parts['host'] ) ? (string) preg_replace( '/^www\./i', '', (string) $parts['host'] ) : '';
+        $path  = isset( $parts['path'] ) ? (string) $parts['path'] : '';
+        $label = $host . ( $path !== '/' ? $path : '' );
+        if ( $label === '' ) {
+            $label = $url;
+        }
+        if ( mb_strlen( $label ) > 70 ) {
+            $label = mb_substr( $label, 0, 67 ) . '…';
+        }
+        return $label;
+    }
+
+    /**
+     * Inline link for a URL that sits inside a sentence.
+     */
+    private function inline_link_html( string $url ): string {
+        return '<a href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer" style="color:#1877f2;text-decoration:underline;word-break:break-word;">' . esc_html( $this->link_label( $url ) ) . '</a>';
+    }
+
+    /**
+     * Standalone link block.
+     */
+    private function link_card_html( string $url, string $label = '' ): string {
+        if ( ! wp_http_validate_url( $url ) ) {
+            return '';
+        }
+        $host = $this->link_label( $url );
+        if ( $label === '' ) {
+            $label = $host;
+            $sub   = '';
+        } else {
+            $sub = '<span style="display:block;margin-top:0.2em;font-size:0.85em;font-weight:400;color:#646970;">' . esc_html( $host ) . '</span>';
+        }
+        return '<p style="margin:1.25em 0;"><a href="' . esc_url( $url ) . '" target="_blank" rel="noopener noreferrer" style="display:inline-block;max-width:100%;padding:0.85em 1.1em;border:1px solid #d0d7de;border-left:4px solid #1877f2;border-radius:8px;background:#f6f7f7;color:#1d2327;text-decoration:none;font-weight:600;line-height:1.4;">' . esc_html( $label ) . $sub . '</a></p>';
+    }
+
+    /**
+     * Escape text and turn URLs into links. A line that is only a URL becomes a link block.
+     */
+    private function format_message_html( string $text ): string {
+        $text = trim( $text );
+        if ( $text === '' ) {
+            return '';
+        }
+
+        $html   = '';
+        $buffer = [];
+        $flush  = function () use ( &$buffer, &$html ): void {
+            if ( $buffer === [] ) {
+                return;
+            }
+            $html  .= wpautop( $this->linkify_inline( implode( "\n", $buffer ) ) );
+            $buffer = [];
+        };
+
+        foreach ( preg_split( "/\r\n|\n|\r/", $text ) as $line ) {
+            if ( $this->is_url_line( $line ) ) {
+                $flush();
+                [ $url ] = $this->split_url_token( trim( $line ) );
+                $html   .= $this->link_card_html( $url );
+                continue;
+            }
+            $buffer[] = $line;
+        }
+        $flush();
+        return $html;
+    }
+
+    /**
+     * Turn URLs inside a sentence into inline links. The rest of the text is escaped.
+     */
+    private function linkify_inline( string $text ): string {
+        $parts = preg_split( '#(https?://[^\s<]+|www\.[^\s<]+)#iu', $text, -1, PREG_SPLIT_DELIM_CAPTURE );
+        if ( ! is_array( $parts ) ) {
+            return esc_html( $text );
+        }
+
+        $out = '';
+        foreach ( $parts as $i => $part ) {
+            if ( $i % 2 === 0 ) {
+                $out .= esc_html( $part );
+                continue;
+            }
+            [ $url, $trailing ] = $this->split_url_token( $part );
+            if ( $url === '' ) {
+                $out .= esc_html( $part );
+                continue;
+            }
+            $out .= $this->inline_link_html( $url ) . esc_html( $trailing );
+        }
+        return $out;
+    }
+
+    /**
+     * Whether rendered HTML already links to this URL.
+     */
+    private function html_contains_url( string $html, string $url ): bool {
+        return str_contains( $html, esc_url( $url ) );
+    }
+
+    /**
      * Collect image URLs and share URL from FB post attachments.
      *
      * @return array{images: string[], share_url: string}
@@ -376,7 +543,7 @@ class SB_FB_Profile_Importer_Admin {
     private function create_wp_post_from_fb( array $fb_post, string $post_status ): int|WP_Error {
         $message = $fb_post['message'] ?? '';
         $split   = $this->split_title_and_content( $message );
-        $title   = $split['title'];
+        $title   = $this->strip_urls_from_title( $split['title'] );
         if ( $title === '' ) {
             $title = sprintf(
                 /* translators: %s: date */
@@ -384,11 +551,16 @@ class SB_FB_Profile_Importer_Admin {
                 ! empty( $fb_post['created_time'] ) ? wp_date( get_option( 'date_format' ), strtotime( $fb_post['created_time'] ) ) : wp_date( get_option( 'date_format' ) )
             );
         }
-        $content = $split['content_part'] !== '' ? wpautop( esc_html( $split['content_part'] ) ) : '';
+        $content = $this->format_message_html( $split['content_part'] );
+        foreach ( $this->extract_urls( $message ) as $url ) {
+            if ( ! $this->html_contains_url( $content, $url ) ) {
+                $content .= $this->link_card_html( $url );
+            }
+        }
 
         $att_data = $this->get_attachments_images_and_share( $fb_post );
-        if ( $att_data['share_url'] !== '' ) {
-            $content .= "\n\n<p><a href=\"" . esc_url( $att_data['share_url'] ) . "\" target=\"_blank\" rel=\"noopener\">" . esc_html__( 'Прочети повече', 'sb-fb-profile-importer' ) . '</a></p>';
+        if ( $att_data['share_url'] !== '' && ! $this->html_contains_url( $content, $att_data['share_url'] ) ) {
+            $content .= $this->link_card_html( $att_data['share_url'], __( 'Прочети повече', 'sb-fb-profile-importer' ) );
         }
 
         $post_date = '';
